@@ -4,8 +4,13 @@
 require __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
-use Olidol\Console\Command\FindDuplicatesCommand;
+use Olidol\Console\Command;
+use Sabre\DAV\Client;
 
 $application = new Application();
-$application->add(new FindDuplicatesCommand());
+
+$application->add(new Command\Config\Connection\CreateCommand());
+$application->add(new Command\Config\Connection\DeleteCommand());
+$application->add(new Command\Config\Connection\ListCommand());
+
 $application->run();
