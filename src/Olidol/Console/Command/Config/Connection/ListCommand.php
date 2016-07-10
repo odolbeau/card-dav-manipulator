@@ -11,20 +11,32 @@ use Sabre\DAV\Client;
 use Symfony\Component\Filesystem\Filesystem;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Olidol\Console\Command\ConfigurationCommand;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Olidol\Config;
 
-class ListCommand extends ConfigurationCommand
+class ListCommand extends Command
 {
-    public function __construct(LoggerInterface $logger = null)
+    protected $config;
+    protected $logger;
+
+    /**
+     * __construct
+     *
+     * @param Config $config
+     * @param LoggerInterface $logger
+     */
+    public function __construct(Config $config, LoggerInterface $logger = null)
     {
-        parent::__construct('connections', $logger);
+        $this->config = $config;
+        $this->logger = $logger ?: new NullLogger();
+
+        parent::__construct();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function doConfigure()
+    protected function configure()
     {
         $this
             ->setName('config:connection:list')
@@ -35,11 +47,11 @@ class ListCommand extends ConfigurationCommand
     /**
      * {@inheritDoc}
      */
-    protected function doExecute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
 
-        $connections = $this->loadConfig();
+        $connections = $this->config->load('connections');
 
         if (0 === count($connections)) {
             $io->warning('No connections defined.');

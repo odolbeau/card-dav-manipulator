@@ -11,20 +11,32 @@ use Sabre\DAV\Client;
 use Symfony\Component\Filesystem\Filesystem;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Olidol\Console\Command\ConfigurationCommand;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Olidol\Config;
 
-class CreateCommand extends ConfigurationCommand
+class CreateCommand extends Command
 {
-    public function __construct(LoggerInterface $logger = null)
+    protected $config;
+    protected $logger;
+
+    /**
+     * __construct
+     *
+     * @param Config $config
+     * @param LoggerInterface $logger
+     */
+    public function __construct(Config $config, LoggerInterface $logger = null)
     {
-        parent::__construct('connections', $logger);
+        $this->config = $config;
+        $this->logger = $logger ?: new NullLogger();
+
+        parent::__construct();
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function doConfigure()
+    protected function configure()
     {
         $this
             ->setName('config:connection:create')
@@ -39,11 +51,11 @@ class CreateCommand extends ConfigurationCommand
     /**
      * {@inheritDoc}
      */
-    protected function doExecute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
 
-        $connections = $this->loadConfig();
+        $connections = $this->config->load('connections');
 
         $name = $input->getArgument('name');
 
@@ -53,7 +65,7 @@ class CreateCommand extends ConfigurationCommand
             'password' => $input->getArgument('password'),
         ];
 
-        $this->saveConfig($connections);
+        $this->config->save('connections', $connections);
 
         $io->success("New connection named $name added.");
     }

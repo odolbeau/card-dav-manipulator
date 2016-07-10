@@ -6,11 +6,15 @@ require __DIR__.'/vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use Olidol\Console\Command;
 use Sabre\DAV\Client;
+use Olidol\Container;
+
+$container = new Container();
 
 $application = new Application();
+$application->setDispatcher($container['dispatcher']);
 
-$application->add(new Command\Config\Connection\CreateCommand());
-$application->add(new Command\Config\Connection\DeleteCommand());
-$application->add(new Command\Config\Connection\ListCommand());
+$application->add(new Command\Config\Connection\CreateCommand($container['config']));
+$application->add(new Command\Config\Connection\DeleteCommand($container['config']));
+$application->add(new Command\Config\Connection\ListCommand($container['config']));
 
 $application->run();
