@@ -43,7 +43,7 @@ class CreateCommand extends Command
             ->setDescription('Create a new connection or overwrite an existing one.')
             ->addArgument('name', InputArgument::REQUIRED, 'Name of the connection.')
             ->addArgument('baseUri', InputArgument::REQUIRED, 'Url.')
-            ->addArgument('username', InputArgument::REQUIRED, 'Username to use to connect.')
+            ->addArgument('userName', InputArgument::REQUIRED, 'Username to use to connect.')
             ->addArgument('password', InputArgument::REQUIRED, 'Password to use to connect.')
         ;
     }
@@ -61,7 +61,7 @@ class CreateCommand extends Command
 
         $connections[$name] = [
             'baseUri'  => $input->getArgument('baseUri'),
-            'username' => $input->getArgument('username'),
+            'userName' => $input->getArgument('userName'),
             'password' => $input->getArgument('password'),
         ];
 
