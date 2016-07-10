@@ -5,7 +5,6 @@ require __DIR__.'/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 use Olidol\Console\Command;
-use Sabre\DAV\Client;
 use Olidol\Container;
 
 $container = new Container();
@@ -13,6 +12,9 @@ $container = new Container();
 $application = new Application();
 $application->setDispatcher($container['dispatcher']);
 
+// AddressBook
+$application->add(new Command\AddressBook\ExportCommand($container['client.factory']));
+// Configuration
 $application->add(new Command\Config\Connection\CreateCommand($container['config']));
 $application->add(new Command\Config\Connection\DeleteCommand($container['config']));
 $application->add(new Command\Config\Connection\ListCommand($container['config']));
