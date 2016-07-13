@@ -62,7 +62,7 @@ class ExportCommand extends Command
         $fp = fopen($input->getOption('output'), 'w');
 
         foreach ($cards as $card) {
-            fwrite($fp, $card);
+            fwrite($fp, $card->serialize());
         }
 
         fclose($fp);

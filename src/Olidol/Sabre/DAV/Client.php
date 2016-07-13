@@ -5,6 +5,7 @@ namespace Olidol\Sabre\DAV;
 use Sabre\DAV\Client as BaseClient;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\Request;
+use Sabre\VObject;
 
 class Client extends BaseClient
 {
@@ -14,7 +15,7 @@ class Client extends BaseClient
      * @param string $user
      * @param string $addressbook
      *
-     * @return [] Raw cards
+     * @return []
      */
     public function retrieveAllCards($user, $addressbook)
     {
@@ -47,6 +48,13 @@ class Client extends BaseClient
         $contacts = new \SimpleXMLElement($xml);
         $contacts->registerXPathNamespace('card', 'urn:ietf:params:xml:ns:carddav');
 
-        return $contacts->xpath('//card:address-data');
+        $rawCards = $contacts->xpath('//card:address-data');
+
+        $cards = [];
+        foreach ($rawCards as $rawCard) {
+            $cards[] = VObject\Reader::read((string) $rawCard);
+        }
+
+        return $cards;
     }
 }
