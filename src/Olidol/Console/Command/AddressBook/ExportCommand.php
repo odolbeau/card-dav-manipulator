@@ -8,8 +8,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Sabre\DAV\Client;
-use Sabre\HTTP\ClientHttpException;
-use Sabre\HTTP\Request;
 use Olidol\ClientFactory;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -52,49 +50,22 @@ class ExportCommand extends Command
 
         $client = $this->clientFactory->getClientForConnection($input->getArgument('connection'));
 
-        $user = $input->getArgument('user');
-        $addressbook = $input->getArgument('addressbook');
+        $io->text('Retrieving contacts from server, please wait...');
 
-        $url = $client->getAbsoluteUrl("addressbooks/$user/$addressbook");
-
-        $io->text("Retrieving contacts from $url, please wait...");
-
-        try {
-            $response = $client->send(new Request(
-                'REPORT',
-                $url,
-                [
-                    'Depth' => 1
-                ],
-                '<card:addressbook-query xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
-                    <d:prop>
-                        <d:getetag />
-                        <card:address-data />
-                    </d:prop>
-                </card:addressbook-query>'
-            ));
-        } catch (ClientHttpException $e) {
-            $this->logger->error('Unable to propfind contacts.', [
-                'exception' => $e
-            ]);
-
-            throw $e;
-        }
+        $cards = $client->retrieveAllCards(
+            $input->getArgument('user'),
+            $input->getArgument('addressbook')
+        );
 
         $io->text("Write contacts to file.");
 
-        $xml = $response->getBody();
-
         $fp = fopen($input->getOption('output'), 'w');
-
-        $contacts = new \SimpleXMLElement($xml);
-        $contacts->registerXPathNamespace('card', 'urn:ietf:params:xml:ns:carddav');
-
-        $cards = $contacts->xpath('//card:address-data');
 
         foreach ($cards as $card) {
             fwrite($fp, $card);
         }
+
+        fclose($fp);
 
         $io->success(count($cards).' contacts exported!');
     }

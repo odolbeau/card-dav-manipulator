@@ -4,7 +4,7 @@ namespace Olidol;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Sabre\DAV\Client;
+use Olidol\Sabre\DAV\Client;
 
 class ClientFactory
 {
