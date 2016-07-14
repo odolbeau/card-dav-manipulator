@@ -34,6 +34,42 @@ EOC;
         $this->assertCleaned($cardToClean, $expectedCard);
     }
 
+    public function test_it_removes_duplicated_phones_and_emails()
+    {
+        $cardToClean = <<<EOC
+BEGIN:VCARD
+VERSION:3.0
+FN:Firstname Lastname
+BDAY:1986-03-20
+TEL;TYPE=VOICE,CELL:0606060606
+TEL;TYPE=VOICE,CELL:0606060606
+TEL;TYPE=VOICE,CELL:0606060606
+TEL;TYPE=HOME:0101010101
+N:NAME;Firstname;;;
+EMAIL;TYPE=INTERNET:email@hotmail.fr
+EMAIL;TYPE=INTERNET:email@hotmail.fr
+EMAIL;TYPE=HOME,INTERNET:email@hotmail.fr
+UID:56f8ed99-8ae8-4d3d-aee0-34873861eae1
+END:VCARD
+EOC;
+
+        $expectedCard = <<<EOC
+BEGIN:VCARD
+VERSION:3.0
+FN:Firstname Lastname
+BDAY:1986-03-20
+N:NAME;Firstname;;;
+UID:56f8ed99-8ae8-4d3d-aee0-34873861eae1
+TEL;TYPE=VOICE,CELL:0606060606
+TEL;TYPE=HOME:0101010101
+EMAIL;TYPE=INTERNET:email@hotmail.fr
+EMAIL;TYPE=HOME,INTERNET:email@hotmail.fr
+END:VCARD
+EOC;
+
+        $this->assertCleaned($cardToClean, $expectedCard);
+    }
+
     /**
      * assertCleaned
      *

@@ -53,6 +53,38 @@ class Repairer
             $contact->$property = $contact->$property;
         }
 
+        foreach (['TEL', 'EMAIL'] as $property) {
+            $values = $contact->select($property);
+            $count = count($values);
+
+            if (1 >= $count) {
+                continue;
+            }
+
+            $this->logger->info('Found more than 1 value ({count}) for property "{property}"', [
+                'property' => $property,
+                'count' => $count,
+            ]);
+
+            $keptProperties = [];
+            for ($i = 0; $i < count($values); $i++) {
+                $key = $values[$i]->getValue() . '-' . $values[$i]['TYPE']->getValue();
+                // This property already exists, go the next one.
+                if (array_key_exists($key, $keptProperties)) {
+                    continue;
+                }
+
+                $keptProperties[$key] = $values[$i];
+            }
+
+            unset($contact->$property);
+            foreach ($keptProperties as $keptProperty) {
+                $contact->add($keptProperty);
+            }
+
+            unset($keptProperties);
+        }
+
         return $contact;
     }
 }
