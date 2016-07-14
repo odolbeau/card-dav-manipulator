@@ -46,7 +46,7 @@ class Repairer
             $stringValues = array_values(array_unique($stringValues));
 
             if (1 !== count($stringValues)) {
-                throw new DifferentValuesForUniqPropertyException($name, $stringValues);
+                throw new DifferentValuesForUniqPropertyException($property, $stringValues);
             }
 
             // All values are similar, just overwrite the exist one with the actual default one.

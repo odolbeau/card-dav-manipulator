@@ -71,22 +71,41 @@ EOC;
     }
 
     /**
+     * @expectedException \Olidol\DAV\Manipulator\Exception\DifferentValuesForUniqPropertyException
+     * @expectedExceptionMessage Found different values for property "N". Values: "FN1", "FN2", "FN3"
+     */
+    public function test_it_throw_an_exception_when_repair_is_not_possible()
+    {
+        $cardToClean = <<<EOC
+BEGIN:VCARD
+VERSION:3.0
+N:FN1
+N:FN2
+N:FN3
+UID:56f8ed99-8ae8-4d3d-aee0-34873861eae1
+END:VCARD
+EOC;
+        $this->assertCleaned($cardToClean);
+    }
+
+    /**
      * assertCleaned
      *
      * @param string $cardToClean
      * @param string $expectedCard
      */
-    private function assertCleaned($cardToClean, $expectedCard)
+    private function assertCleaned($cardToClean, $expectedCard = null)
     {
-        // We transform both strings into VCards otherwise it's a mess to
-        // compare the expectedResult which usually doesn't respect line
-        // endings.
         $card = VObject\Reader::read((string) $cardToClean);
-        $expectedCard = VObject\Reader::read((string) $expectedCard);
 
         $contactCleaner = new Repairer();
         $cleanedCard = $contactCleaner->repair($card);
 
+        if (null === $expectedCard) {
+            return;
+        }
+
+        $expectedCard = VObject\Reader::read((string) $expectedCard);
         $this->assertSame($expectedCard->serialize(), $cleanedCard->serialize());
     }
 }
