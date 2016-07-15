@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Sabre\DAV\Client;
 use Olidol\ClientFactory;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -27,7 +26,7 @@ class ExportCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -42,7 +41,7 @@ class ExportCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -56,7 +55,7 @@ class ExportCommand extends Command
 
         $cards = $client->retrieveAllCards();
 
-        $io->text("Write contacts to file.");
+        $io->text('Write contacts to file.');
 
         $fp = fopen($input->getOption('output'), 'w');
 

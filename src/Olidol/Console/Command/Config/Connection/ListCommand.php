@@ -5,10 +5,6 @@ namespace Olidol\Console\Command\Config\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Sabre\DAV\Client;
-use Symfony\Component\Filesystem\Filesystem;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -20,9 +16,9 @@ class ListCommand extends Command
     protected $logger;
 
     /**
-     * __construct
+     * __construct.
      *
-     * @param Config $config
+     * @param Config          $config
      * @param LoggerInterface $logger
      */
     public function __construct(Config $config, LoggerInterface $logger = null)
@@ -34,7 +30,7 @@ class ListCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -45,7 +41,7 @@ class ListCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

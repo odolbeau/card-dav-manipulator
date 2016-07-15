@@ -14,12 +14,13 @@ class Client extends BaseClient
     protected $addressbook;
 
     /**
-     * retrieveAllCards
+     * retrieveAllCards.
      *
      * @return []
      */
     public function retrieveAllCards()
     {
+        //$url = $this->getAbsoluteUrl("dav/addressbooks/user/$this->user/$this->addressbook");
         $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook");
 
         try {
@@ -28,7 +29,7 @@ class Client extends BaseClient
                 $url,
                 [
                     'Content-Type' => 'text/xml',
-                    'Depth' => 1
+                    'Depth' => 1,
                 ],
                 '<card:addressbook-query xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
                     <d:prop>
@@ -39,7 +40,7 @@ class Client extends BaseClient
             ));
         } catch (ClientHttpException $e) {
             $this->logger->error('Unable to propfind contacts.', [
-                'exception' => $e
+                'exception' => $e,
             ]);
 
             return [];
@@ -72,13 +73,13 @@ class Client extends BaseClient
                 $url,
                 [
                     'Content-Type' => 'text/vcard',
-                    'charset' => 'utf-8'
+                    'charset' => 'utf-8',
                 ],
                 $card->serialize()
             ));
         } catch (ClientHttpException $e) {
             $this->logger->error('Unable to update contact.', [
-                'exception' => $e
+                'exception' => $e,
             ]);
 
             throw $e;
@@ -97,7 +98,7 @@ class Client extends BaseClient
             ));
         } catch (ClientHttpException $e) {
             $this->logger->error('Unable to delete contact.', [
-                'exception' => $e
+                'exception' => $e,
             ]);
 
             throw $e;

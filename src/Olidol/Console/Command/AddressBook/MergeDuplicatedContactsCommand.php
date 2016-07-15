@@ -7,15 +7,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Sabre\DAV\Client;
-use Sabre\HTTP\ClientHttpException;
-use Sabre\HTTP\Request;
 use Olidol\ClientFactory;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Sabre\VObject;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Olidol\DAV\Manipulator\DuplicateFinder;
 use Olidol\DAV\Manipulator\Merger;
 
@@ -37,7 +32,7 @@ class MergeDuplicatedContactsCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -52,7 +47,7 @@ class MergeDuplicatedContactsCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -98,7 +93,7 @@ class MergeDuplicatedContactsCommand extends Command
             $headers = ['Field', 'Merged contact'] + array_fill(0, count($cards), null);
             $io->table($headers, $allValues);
 
-            if ( true === $io->confirm('Do you confirm the merge?', false)) {
+            if (true === $io->confirm('Do you confirm the merge?', false)) {
                 $client->updateContact($mergedCard);
                 array_shift($cards);
                 foreach ($cards as $card) {

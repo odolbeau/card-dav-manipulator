@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Sabre\DAV\Client;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\Request;
 use Olidol\ClientFactory;
@@ -31,7 +30,7 @@ class ImportCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -47,7 +46,7 @@ class ImportCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -85,7 +84,7 @@ class ImportCommand extends Command
                 throw $e;
             }
 
-            $contacts++;
+            ++$contacts;
             $this->logger->debug('Contact {uid} created or updated.');
 
             $progressBar->advance();

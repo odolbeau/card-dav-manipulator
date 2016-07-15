@@ -12,9 +12,9 @@ class Config
     protected $path;
 
     /**
-     * __construct
+     * __construct.
      *
-     * @param string $path
+     * @param string          $path
      * @param LoggerInterface $logger
      */
     public function __construct($path, LoggerInterface $logger = null)
@@ -24,7 +24,7 @@ class Config
     }
 
     /**
-     * load
+     * load.
      *
      * @param string $name
      *
@@ -48,10 +48,10 @@ class Config
     }
 
     /**
-     * save
+     * save.
      *
      * @param string $name
-     * @param [] $config
+     * @param []     $config
      */
     public function save($name, array $config)
     {
@@ -60,7 +60,7 @@ class Config
         if (!$fs->exists($this->path)) {
             $fs->mkdir($this->path);
             $this->logger->info('Configuration folder {folder} created.', [
-                'folder' => $this->path
+                'folder' => $this->path,
             ]);
         }
 
@@ -69,7 +69,7 @@ class Config
         if (!$fs->exists($file)) {
             $fs->touch($file);
             $this->logger->info('Configuration file {file} created.', [
-                'file' => $file
+                'file' => $file,
             ]);
         }
 

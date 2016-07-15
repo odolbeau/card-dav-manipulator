@@ -6,9 +6,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Sabre\DAV\Client;
-use Symfony\Component\Filesystem\Filesystem;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -22,9 +19,9 @@ class TestCommand extends Command
     protected $logger;
 
     /**
-     * __construct
+     * __construct.
      *
-     * @param ClientFactory $clientFactory
+     * @param ClientFactory   $clientFactory
      * @param LoggerInterface $logger
      */
     public function __construct(ClientFactory $clientFactory, LoggerInterface $logger = null)
@@ -36,7 +33,7 @@ class TestCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -48,7 +45,7 @@ class TestCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

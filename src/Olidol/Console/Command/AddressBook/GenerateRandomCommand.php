@@ -5,12 +5,7 @@ namespace Olidol\Console\Command\AddressBook;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Sabre\DAV\Client;
-use Sabre\HTTP\ClientHttpException;
-use Sabre\HTTP\Request;
-use Olidol\ClientFactory;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -29,7 +24,7 @@ class GenerateRandomCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -42,7 +37,7 @@ class GenerateRandomCommand extends Command
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -56,7 +51,7 @@ class GenerateRandomCommand extends Command
         $progressBar = new ProgressBar($output, $limit);
         $progressBar->start();
 
-        for ($i = 0; $i < $limit; $i++) {
+        for ($i = 0; $i < $limit; ++$i) {
             $card = new VObject\Component\VCard([
                 'FN' => $faker->name,
                 'BDAY' => $faker->date,
@@ -77,13 +72,13 @@ class GenerateRandomCommand extends Command
     }
 
     /**
-     * decorateWithType
+     * decorateWithType.
      *
      * @return string
      */
     protected function getType()
     {
-        switch (rand(0, 1) %3) {
+        switch (rand(0, 1) % 3) {
             case 0:
                 return [];
             case 1:

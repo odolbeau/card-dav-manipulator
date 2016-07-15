@@ -17,7 +17,7 @@ class Merger
     }
 
     /**
-     * merge
+     * merge.
      *
      * @param array $contacts
      *
@@ -55,7 +55,7 @@ class Merger
                         }
                     case 'FN':
                         // Directly keep this value if the main contact is empty.
-                        if (0 === count($mainContact->select($property->name))){
+                        if (0 === count($mainContact->select($property->name))) {
                             $mainContact->add($property);
                             break;
                         }

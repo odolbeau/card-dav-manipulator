@@ -17,7 +17,7 @@ class Repairer
     }
 
     /**
-     * repair
+     * repair.
      *
      * @param VCard $contact
      *
@@ -67,8 +67,8 @@ class Repairer
             ]);
 
             $keptProperties = [];
-            for ($i = 0; $i < count($values); $i++) {
-                $key = $values[$i]->getValue() . '-' . $values[$i]['TYPE']->getValue();
+            for ($i = 0; $i < count($values); ++$i) {
+                $key = $values[$i]->getValue().'-'.$values[$i]['TYPE']->getValue();
                 // This property already exists, go the next one.
                 if (array_key_exists($key, $keptProperties)) {
                     continue;

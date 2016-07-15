@@ -16,7 +16,7 @@ class Duplicate
     }
 
     /**
-     * add
+     * add.
      *
      * @param VCard $card
      */
@@ -26,7 +26,7 @@ class Duplicate
     }
 
     /**
-     * all
+     * all.
      *
      * @return []
      */

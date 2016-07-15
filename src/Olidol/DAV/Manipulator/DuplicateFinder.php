@@ -16,7 +16,7 @@ class DuplicateFinder
     }
 
     /**
-     * findDuplicates
+     * findDuplicates.
      *
      * @param array $cards
      *
@@ -31,7 +31,7 @@ class DuplicateFinder
                 continue;
             }
 
-            foreach($emails as $email) {
+            foreach ($emails as $email) {
                 $email = $email->getParts()[0];
                 if (!array_key_exists($email, $cardsEmails)) {
                     $cardsEmails[$email] = [];

@@ -14,9 +14,9 @@ class ClientFactory
     protected $clients = [];
 
     /**
-     * __construct
+     * __construct.
      *
-     * @param Config $config
+     * @param Config          $config
      * @param LoggerInterface $logger
      */
     public function __construct(Config $config, LoggerInterface $logger = null)
@@ -26,7 +26,7 @@ class ClientFactory
     }
 
     /**
-     * getClientForConnection
+     * getClientForConnection.
      *
      * @param string $name
      *
