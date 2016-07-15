@@ -20,4 +20,9 @@ $application->add(new Command\Config\Connection\CreateCommand($container['config
 $application->add(new Command\Config\Connection\DeleteCommand($container['config']));
 $application->add(new Command\Config\Connection\ListCommand($container['config']));
 
+// Dev / debug commands
+if (class_exists('Faker\Factory')) {
+    $application->add(new Command\AddressBook\GenerateRandomCommand());
+}
+
 $application->run();
