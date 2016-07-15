@@ -27,6 +27,7 @@ class Client extends BaseClient
                 'REPORT',
                 $url,
                 [
+                    'Content-Type' => 'text/xml',
                     'Depth' => 1
                 ],
                 '<card:addressbook-query xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
