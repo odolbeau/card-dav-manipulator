@@ -4,6 +4,9 @@ namespace Olidol;
 
 use Pimple\Container as BaseContainer;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Olidol\DAV\Manipulator\Merger;
+use Olidol\DAV\Manipulator\DuplicateFinder;
+use Olidol\DAV\Manipulator\Repairer;
 
 class Container extends BaseContainer
 {
@@ -20,9 +23,21 @@ class Container extends BaseContainer
                 return new Config($c['config.path']);
             },
 
+            'merger' => function ($c) {
+                return new Merger($c['repairer']);
+            },
+
             'dispatcher' => function ($c) {
                 return new EventDispatcher();
-            }
+            },
+
+            'duplicate_finder' => function ($c) {
+                return new DuplicateFinder();
+            },
+
+            'repairer' => function ($c) {
+                return new Repairer();
+            },
         ]);
     }
 }

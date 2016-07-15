@@ -22,6 +22,7 @@ class DuplicateFinderTest extends \PHPUnit_Framework_TestCase
 
         foreach ($duplicates as $duplicate) {
             $cards = $duplicate->all();
+            $this->assertTrue(1 < count($cards));
             $email = (string) array_shift($cards)->EMAIL;
             foreach ($cards as $card) {
                 $this->assertSame((string) $card->EMAIL, $email);

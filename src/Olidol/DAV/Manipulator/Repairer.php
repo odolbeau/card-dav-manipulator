@@ -23,7 +23,7 @@ class Repairer
      *
      * @return VCard
      */
-    public function repair($contact)
+    public function repair(VCard $contact)
     {
         foreach (['ANNIVERSARY', 'BDAY', 'GENDER', 'KIND', 'N', 'PRODID', 'REV'] as $property) {
             $values = $contact->select($property);

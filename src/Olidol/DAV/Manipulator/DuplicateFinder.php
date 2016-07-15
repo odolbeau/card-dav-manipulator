@@ -42,7 +42,7 @@ class DuplicateFinder
         }
 
         $cardsEmails = array_filter($cardsEmails, function ($v) {
-            return 1 < count($v);
+            return 1 < count(array_unique($v));
         });
 
         $duplicates = [];

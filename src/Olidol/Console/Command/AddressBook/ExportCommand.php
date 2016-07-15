@@ -49,13 +49,12 @@ class ExportCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $client = $this->clientFactory->getClientForConnection($input->getArgument('connection'));
+        $client->setUser($input->getArgument('user'));
+        $client->setAddressbook($input->getArgument('addressbook'));
 
         $io->text('Retrieving contacts from server, please wait...');
 
-        $cards = $client->retrieveAllCards(
-            $input->getArgument('user'),
-            $input->getArgument('addressbook')
-        );
+        $cards = $client->retrieveAllCards();
 
         $io->text("Write contacts to file.");
 

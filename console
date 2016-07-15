@@ -15,6 +15,11 @@ $application->setDispatcher($container['dispatcher']);
 // AddressBook
 $application->add(new Command\AddressBook\ExportCommand($container['client.factory']));
 $application->add(new Command\AddressBook\ImportCommand($container['client.factory']));
+$application->add(new Command\AddressBook\MergeDuplicatedContactsCommand(
+    $container['client.factory'],
+    $container['duplicate_finder'],
+    $container['merger']
+));
 // Configuration
 $application->add(new Command\Config\Connection\CreateCommand($container['config']));
 $application->add(new Command\Config\Connection\DeleteCommand($container['config']));

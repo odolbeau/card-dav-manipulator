@@ -6,20 +6,21 @@ use Sabre\DAV\Client as BaseClient;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\Request;
 use Sabre\VObject;
+use Sabre\VObject\Component\VCard;
 
 class Client extends BaseClient
 {
+    protected $user;
+    protected $addressbook;
+
     /**
      * retrieveAllCards
      *
-     * @param string $user
-     * @param string $addressbook
-     *
      * @return []
      */
-    public function retrieveAllCards($user, $addressbook)
+    public function retrieveAllCards()
     {
-        $url = $this->getAbsoluteUrl("addressbooks/$user/$addressbook");
+        $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook");
 
         try {
             $response = $this->send(new Request(
@@ -52,9 +53,63 @@ class Client extends BaseClient
 
         $cards = [];
         foreach ($rawCards as $rawCard) {
-            $cards[] = VObject\Reader::read((string) $rawCard);
+            $card = VObject\Reader::read((string) $rawCard);
+            $cards[(string) $card->UID] = $card;
         }
 
         return $cards;
+    }
+
+    public function updateContact(VCard $card)
+    {
+        $uid = (string) $card->UID;
+        $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook/$uid.vcf");
+
+        try {
+            $response = $this->send(new Request(
+                'PUT',
+                $url,
+                [
+                    'Content-Type' => 'text/vcard',
+                    'charset' => 'utf-8'
+                ],
+                $card->serialize()
+            ));
+        } catch (ClientHttpException $e) {
+            $this->logger->error('Unable to update contact.', [
+                'exception' => $e
+            ]);
+
+            throw $e;
+        }
+    }
+
+    public function deleteContact(VCard $card)
+    {
+        $uid = (string) $card->UID;
+        $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook/$uid.vcf");
+
+        try {
+            $response = $this->send(new Request(
+                'DELETE',
+                $url
+            ));
+        } catch (ClientHttpException $e) {
+            $this->logger->error('Unable to delete contact.', [
+                'exception' => $e
+            ]);
+
+            throw $e;
+        }
+    }
+
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    public function setAddressbook($addressbook)
+    {
+        $this->addressbook = $addressbook;
     }
 }
