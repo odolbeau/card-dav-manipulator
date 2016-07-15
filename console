@@ -24,6 +24,7 @@ $application->add(new Command\AddressBook\MergeDuplicatedContactsCommand(
 $application->add(new Command\Config\Connection\CreateCommand($container['config']));
 $application->add(new Command\Config\Connection\DeleteCommand($container['config']));
 $application->add(new Command\Config\Connection\ListCommand($container['config']));
+$application->add(new Command\Config\Connection\TestCommand($container['client.factory']));
 
 // Dev / debug commands
 if (class_exists('Faker\Factory')) {
