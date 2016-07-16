@@ -8,10 +8,32 @@ use Sabre\HTTP\Request;
 use Sabre\VObject;
 use Sabre\VObject\Component\VCard;
 
-class Client extends BaseClient
+class Client
 {
+    protected $client;
+    protected $type;
+
     protected $user;
     protected $addressbook;
+
+    /**
+     * __construct
+     *
+     * @param string $type
+     * @param string $baseUri
+     * @param string $userName
+     * @param string $password
+     */
+    public function __construct($type, $baseUri, $userName, $password)
+    {
+        $this->client = new BaseClient([
+            'baseUri' => $baseUri,
+            'userName' => $userName,
+            'password' => $password,
+        ]);
+
+        $this->type = $type;
+    }
 
     /**
      * retrieveAllCards.
@@ -20,13 +42,10 @@ class Client extends BaseClient
      */
     public function retrieveAllCards()
     {
-        //$url = $this->getAbsoluteUrl("dav/addressbooks/user/$this->user/$this->addressbook");
-        $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook");
-
         try {
-            $response = $this->send(new Request(
+            $response = $this->client->send(new Request(
                 'REPORT',
-                $url,
+                $this->getAddressbookAbsoluteUrl(),
                 [
                     'Content-Type' => 'text/xml',
                     'Depth' => 1,
@@ -62,15 +81,19 @@ class Client extends BaseClient
         return $cards;
     }
 
+    /**
+     * updateContact
+     *
+     * @param VCard $card
+     */
     public function updateContact(VCard $card)
     {
         $uid = (string) $card->UID;
-        $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook/$uid.vcf");
 
         try {
-            $response = $this->send(new Request(
+            $this->client->send(new Request(
                 'PUT',
-                $url,
+                $this->getContactAbsoluteUrl($uid),
                 [
                     'Content-Type' => 'text/vcard',
                     'charset' => 'utf-8',
@@ -86,15 +109,19 @@ class Client extends BaseClient
         }
     }
 
+    /**
+     * deleteContact
+     *
+     * @param VCard $card
+     */
     public function deleteContact(VCard $card)
     {
         $uid = (string) $card->UID;
-        $url = $this->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook/$uid.vcf");
 
         try {
-            $response = $this->send(new Request(
+            $response = $this->client->send(new Request(
                 'DELETE',
-                $url
+                $this->getContactAbsoluteUrl($uid)
             ));
         } catch (ClientHttpException $e) {
             $this->logger->error('Unable to delete contact.', [
@@ -105,13 +132,57 @@ class Client extends BaseClient
         }
     }
 
+    /**
+     * setUser
+     *
+     * @param string $user
+     */
     public function setUser($user)
     {
         $this->user = $user;
     }
 
+    /**
+     * setAddressbook
+     *
+     * @param string $addressbook
+     */
     public function setAddressbook($addressbook)
     {
         $this->addressbook = $addressbook;
+    }
+
+    /**
+     * getAddressbookAbsoluteUrl
+     *
+     * @return string
+     */
+    protected function getAddressbookAbsoluteUrl()
+    {
+        switch ($this->type) {
+            case 'baikal':
+                return $this->client->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook");
+            case 'fastmail':
+                return $this->client->getAbsoluteUrl("addressbooks/user/$this->user/$this->addressbook");
+        }
+
+        throw new UnknownTypeException($this->type);
+    }
+
+    /**
+     * getContactAbsoluteUrl
+     *
+     * @return string
+     */
+    protected function getContactAbsoluteUrl($uid)
+    {
+        switch ($this->type) {
+            case 'baikal':
+                return $this->client->getAbsoluteUrl("addressbooks/$this->user/$this->addressbook/$uid.vcf");
+            case 'fastmail':
+                return $this->client->getAbsoluteUrl("addressbooks/user/$this->user/$this->addressbook/$uid.vcf");
+        }
+
+        throw new UnknownTypeException($this->type);
     }
 }

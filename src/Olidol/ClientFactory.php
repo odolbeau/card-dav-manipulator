@@ -44,7 +44,14 @@ class ClientFactory
             throw new \InvalidArgumentException("Unknown connection $name");
         }
 
-        $client = new Client($connections[$name]);
+        $parameters = $connections[$name];
+
+        $client = new Client(
+            $parameters['type'],
+            $parameters['baseUri'],
+            $parameters['userName'],
+            $parameters['password']
+        );
 
         $this->clients[$name] = $client;
 

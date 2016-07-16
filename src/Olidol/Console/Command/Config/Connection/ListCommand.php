@@ -57,9 +57,15 @@ class ListCommand extends Command
 
         $rows = [];
         foreach ($connections as $name => $connection) {
-            $rows[] = [$name, $connection ['baseUri'], $connection['userName'], str_pad('', strlen($connection['password']), '*')];
+            $rows[] = [
+                $name,
+                $connection['type'],
+                $connection['baseUri'],
+                $connection['userName'],
+                str_pad('', strlen($connection['password']), '*')
+            ];
         }
 
-        $io->table(['Name', 'baseUrl', 'username', 'password'], $rows);
+        $io->table(['Name', 'type', 'baseUrl', 'username', 'password'], $rows);
     }
 }
