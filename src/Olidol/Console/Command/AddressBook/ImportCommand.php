@@ -53,9 +53,9 @@ class ImportCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $client = $this->clientFactory->getClientForConnection($input->getArgument('connection'));
+        $client->setUser($input->getArgument('user'));
+        $client->setAddressbook($input->getArgument('addressbook'));
 
-        $user = $input->getArgument('user');
-        $addressbook = $input->getArgument('addressbook');
         $inputFile = $input->getArgument('input');
         $limit = $input->getOption('limit', null);
 
@@ -68,21 +68,7 @@ class ImportCommand extends Command
         $contacts = 0;
         $splitter = new VObject\Splitter\VCard(fopen($inputFile, 'r'));
         while (null !== $vCard = $splitter->getNext()) {
-            $uid = $vCard->UID;
-
-            $url = $client->getAbsoluteUrl("addressbooks/$user/$addressbook/$uid.vcf");
-            try {
-                $response = $client->send(
-                    new Request('PUT', $url, [], $vCard->serialize())
-                );
-            } catch (ClientHttpException $e) {
-                $this->logger->error('Failed to create or update contact "{uid}"', [
-                    'exception' => $e,
-                    'uid' => $uid,
-                ]);
-
-                throw $e;
-            }
+            $client->updateContact($vCard);
 
             ++$contacts;
             $this->logger->debug('Contact {uid} created or updated.');
