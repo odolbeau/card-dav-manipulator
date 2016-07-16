@@ -9,7 +9,7 @@ use Olidol\Container;
 
 $container = new Container();
 
-$application = new Application();
+$application = new Application('DAV Manipulator', 'beta');
 $application->setDispatcher($container['dispatcher']);
 
 // AddressBook
