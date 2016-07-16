@@ -82,9 +82,9 @@ class MergeDuplicatedContactsCommand extends Command
             foreach ($mergedCard->children() as $child) {
                 $name = $child->name;
 
-                $line = [$name, (string) $child];
+                $line = [$name, trim($child->serialize())];
                 foreach ($cards as $card) {
-                    $line[] = (string) $card->{$name};
+                    $line[] = (null !== $property = $card->{$name}) ? trim($property->serialize()) : '-';
                 }
 
                 $allValues[] = $line;
