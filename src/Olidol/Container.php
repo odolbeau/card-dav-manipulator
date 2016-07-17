@@ -13,7 +13,7 @@ class Container extends BaseContainer
     public function __construct()
     {
         parent::__construct([
-            'config.path' => getenv('CARDDAV_CONFIG_PATH') ?: getenv('HOME').'/.config/card-dav-manipulator',
+            'config.path' => getenv('CARDDAV_CONFIG_PATH') ?: getenv('HOME').'/.config/dav-manipulator',
 
             'client.factory' => function ($c) {
                 return new ClientFactory($c['config']);
