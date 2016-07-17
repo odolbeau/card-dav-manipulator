@@ -153,6 +153,20 @@ class Client
     }
 
     /**
+     * Performs an HTTP options request
+     *
+     * This method returns all the features from the 'DAV:' header as an array.
+     * If there was no DAV header, or no contents this method will return an
+     * empty array.
+     *
+     * @return array
+     */
+    public function options()
+    {
+        return $this->client->options();
+    }
+
+    /**
      * getAddressbookAbsoluteUrl
      *
      * @return string
